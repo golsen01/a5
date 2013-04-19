@@ -49,7 +49,10 @@ app.get('/submit.json', function(request, response) {
 		var username = request.query.username;
 		var score = parseInt(request.query.score);
 		var game_title = request.query.game_title;
-		var toInsert = {"username":username, "score":score, "game_title":game_title, "datetime":Date()};
+		var d = new Date();
+		var datestring = d.getMonth() + '/' + d.getDate() + '/' + d.getYear() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+
+		var toInsert = {"username":username, "score":score, "game_title":game_title, "datetime":datestring};
 
 		collection.insert(toInsert, function(err, saved){
 			if (err){
