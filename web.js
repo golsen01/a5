@@ -13,6 +13,7 @@ var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 	db = databaseConnection;
 });
 
+//shows all highscores submitted to the app in descending chronological order
 app.get('/', function (request, response) {
 
 	var startString = '<!DOCTYPE HTML><html><head><title>Grace The Scorekeeper</title></head><body><table><tr><th>Game</th><th>User</th><th>Score</th><th>Date</th></tr>';
@@ -21,7 +22,7 @@ app.get('/', function (request, response) {
 	db.collection('highscores', function(err, collection) {
 		collection.find(request.query, function(err, collection){
 			collection.toArray(function(err, collection){
-				for(var i = collection.length - 1; i >=0; i--){
+				for(var i = collection.length - 1; i >=0; i--){		//places most recent score on top of list
 					if(collection[i].game_title != null){
 						startString += '<tr><td>'+ collection[i].game_title + '</td><td>' + collection[i].username + '</td><td>' + collection[i].score + '</td><td>' + collection[i].datetime + '</td></tr>';
 					}
@@ -37,6 +38,7 @@ app.get('/', function (request, response) {
 
 });
 
+//submits a new highscore for a game and specific user
 app.get('/submit.json', function(request, response) {
 	response.header("Access-Control-Allow-Origin", "*");			//these two lines are for CORS
 	response.header("Access-Control-Allow-Headers", "X-Request");
@@ -63,6 +65,7 @@ app.get('/submit.json', function(request, response) {
 	});
 });
 
+//shows the top 10 highscores from a specific game
 app.get('/highscores.json', function(request, response){
 
 	response.header("Access-Control-Allow-Origin", "*");			//these two lines are for CORS
@@ -90,10 +93,10 @@ app.get('/highscores.json', function(request, response){
 
 });
 
+//shows the highscores for a particular user
 app.get('/usersearch', function(request, response){
 	response.send('<form name="input" action="/" method="get">Username: <input type="text" name="username"><input type="submit" value="Submit"></form>');
 })
 
-
-// Oh joy! http://stackoverflow.com/questions/15693192/heroku-node-js-error-web-process-failed-to-bind-to-port-within-60-seconds-of
+//listening to port 5000
 app.listen(process.env.PORT || 5000);
