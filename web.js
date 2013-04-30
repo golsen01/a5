@@ -16,7 +16,7 @@ var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 //shows all highscores submitted to the app in descending chronological order
 app.get('/', function (request, response) {
 
-	var startString = '<!DOCTYPE HTML><html><head><title>Grace The Scorekeeper</title></head><body><table><tr><th>Game</th><th>User</th><th>Score</th><th>Date</th></tr>';
+	var startString = '<!DOCTYPE HTML><html><head><title>Grace The Scorekeeper</title><link rel="stylesheet" href="table.css"/></head><body><table><tr><th>Game</th><th>User</th><th>Score</th><th>Date</th></tr>';
 	var endString = '</table></body></html>';
 
 	db.collection('highscores', function(err, collection) {
@@ -39,7 +39,7 @@ app.get('/', function (request, response) {
 });
 
 //submits a new highscore for a game and specific user
-app.get('/submit.json', function(request, response) {
+app.post('/submit.json', function(request, response) {
 	response.header("Access-Control-Allow-Origin", "*");			//these two lines are for CORS
 	response.header("Access-Control-Allow-Headers", "X-Request");
 
